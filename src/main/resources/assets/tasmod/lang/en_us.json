@@ -43,5 +43,13 @@
   "gui.tasmod.savestate.load.name":"Loadstate screen",
   "gui.tasmod.savestate.load.start":"Loading a savestate, please wait",
   "gui.tasmod.savestate.load.end":"Loaded savestate %s from index %s",
-  "gui.tasmod.savestate.button.closegui":"Close"
+  "gui.tasmod.savestate.button.closegui":"Close",
+
+  "gui.tasmod.mainmenu.button.reset": "Reset",
+  "gui.tasmod.mainmenu.button.connect": "Connect",
+
+  "gui.tasmod.mainmenu.status.disconnected": "Disconnected",
+  "gui.tasmod.mainmenu.status.connecting": "Connecting",
+  "gui.tasmod.mainmenu.status.authenticating": "Authenticating",
+  "gui.tasmod.mainmenu.status.connected": "Connected"
 }

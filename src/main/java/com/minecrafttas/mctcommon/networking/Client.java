@@ -59,6 +59,15 @@ public class Client {
 		SERVER;
 	}
 
+	public enum ClientState {
+		DISCONNECTED,
+		CONNECTING,
+		AUTHENTICATING,
+		CONNECTED,
+	}
+
+	public ClientState clientState;
+
 	/**
 	 * Create and connect socket
 	 * 
@@ -71,6 +80,7 @@ public class Client {
 	 */
 	public Client(String host, int port, PacketID[] packetIDs, String name, boolean local) throws Exception {
 		LOGGER.info(Client, "Connecting server to {}:{}", host, port);
+		this.clientState = ClientState.CONNECTING;
 		this.socket = AsynchronousSocketChannel.open();
 		this.socket.connect(new InetSocketAddress(host, port)).get(2, TimeUnit.SECONDS);
 		this.socket.setOption(StandardSocketOptions.SO_KEEPALIVE, true);
@@ -91,6 +101,7 @@ public class Client {
 		this.local = local;
 
 		LOGGER.info(Client, "Connected to server");
+		this.clientState = ClientState.AUTHENTICATING;
 
 		username = name;
 
@@ -121,7 +132,7 @@ public class Client {
 	 * side
 	 */
 	public void disconnect() {
-
+		this.clientState = ClientState.DISCONNECTED;
 		if (isClosed()) {
 			LOGGER.warn(getLoggerMarker(), "Tried to disconnect, but client {} is already closed", getId());
 			return;
@@ -290,6 +301,7 @@ public class Client {
 		this.username = ByteBufferBuilder.readString(buf);
 		LOGGER.debug(getLoggerMarker(), "Completing authentication for user {}", username);
 		EventListenerRegistry.fireEvent(EventClientCompleteAuthentication.class, username);
+		this.clientState = ClientState.CONNECTED;
 	}
 
 	private void handle(ByteBuffer buf) {
@@ -341,5 +353,13 @@ public class Client {
 	@FunctionalInterface
 	public interface ClientCallback {
 		public void onClose(Client client);
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public int getPort() {
+		return port;
 	}
 }

@@ -39,6 +39,9 @@
 		
 		// Keybinding
 		"MixinTextfield",
+
+		// Gui
+		"MixinMainMenu",
 		
 		// Events
 		"events.MixinGuiIngame",
